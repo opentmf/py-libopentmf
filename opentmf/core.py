@@ -16,9 +16,13 @@ You should have received a copy of the GNU Lesser General Public
 License along with this library;  If not, see <http://www.gnu.org/licenses/>.
 """
 
+from ctypes import c_void_p, byref
 from .library import lib
-from .utils import convert_version
+from .utils import convert_version, chk
+from .const import HT_DRIVER
+from .exceptions import InvalidURLError
 from .context import Context
+from .driver import Driver
 
 
 def new_context():
@@ -27,3 +31,17 @@ def new_context():
 
 def get_version():
     return convert_version(lib.opentmf_get_version().contents)
+
+
+def open(ctx, url):
+    handle = c_void_p(None)
+    chk(lib.opentmf_open(ctx.value, url, byref(handle)))
+    try:
+        ht = lib.opentmf_get_handle_type(handle)
+        if ht == HT_DRIVER:
+            return Driver(ctx, handle)
+        else:
+            raise InvalidURLError()
+    except Exception as e:
+        lib.opentmf_close(handle)
+        raise e

@@ -54,3 +54,10 @@ class InvalidParamError(OpenTMFError):
     def __init__(self):
         super(InvalidParamError, self).__init__(E_INVALID_PARAM,
                                                 'Invalid parameter')
+
+
+class InvalidURLError(OpenTMFError):
+    """"""
+
+    def __init__(self):
+        super(InvalidURLError, self).__init__(E_INVALID_URL, 'Invalid URL')

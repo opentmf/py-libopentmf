@@ -28,6 +28,16 @@ class opentmf_version(Structure):
         ("extra", c_char_p)]
 
 
+class opentmf_driver_info(Structure):
+    _fields_ = [
+        ("version", opentmf_version),
+        ("name", c_char_p),
+        ("description", c_char_p),
+        ("authors", c_char_p),
+        ("license", c_char_p),
+        ("non_free", c_uint8)]
+
+
 lib = CDLL('libopentmf.so.0')
 
 # Core:
@@ -37,3 +47,13 @@ lib.opentmf_exit.argtypes = [c_void_p]
 lib.opentmf_exit.restype = c_int
 lib.opentmf_get_version.argtypes = []
 lib.opentmf_get_version.restype = POINTER(opentmf_version)
+lib.opentmf_open.argtypes = [c_void_p, c_char_p, POINTER(c_void_p)]
+lib.opentmf_open.restype = c_int
+lib.opentmf_close.argtypes = [c_void_p]
+lib.opentmf_close.restype = c_int
+lib.opentmf_get_handle_type.argtypes = [c_void_p]
+lib.opentmf_get_handle_type.restype = c_int
+
+# Driver:
+lib.opentmf_drv_get_info.argtypes = [c_void_p]
+lib.opentmf_drv_get_info.restype = POINTER(opentmf_driver_info)

@@ -22,3 +22,12 @@ E_NO_MEMORY = -1
 E_NOT_SUPPORTED = -2
 E_FAILED = -3
 E_INVALID_PARAM = -4
+E_INVALID_URL = -5
+
+# handle type
+HT_INVALID = 0
+HT_DRIVER = 1
+
+# boolean
+FALSE = 0
+TRUE = 1
