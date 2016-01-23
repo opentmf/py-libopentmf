@@ -38,6 +38,9 @@ class Driver(object):
         self._license = info.license
         self._non_free = (info.non_free != FALSE)
 
+    def __del__(self):
+        chk(lib.opentmf_close(self._handle));
+
     def _get_version(self):
         return self._version
 
