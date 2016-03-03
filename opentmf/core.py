@@ -33,6 +33,10 @@ def get_version():
     return convert_version(lib.opentmf_get_version().contents)
 
 
+def get_status_str(status):
+    return lib.opentmf_get_status_str(status)
+
+
 def open(ctx, url):
     handle = c_void_p(None)
     chk(lib.opentmf_open(ctx.value, url, byref(handle)))

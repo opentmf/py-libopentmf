@@ -17,11 +17,14 @@ License along with this library;  If not, see <http://www.gnu.org/licenses/>.
 """
 
 from .const import *
+from .library import lib
 
 
 class OpenTMFError(Exception):
     """Base class for all OpenTMF exceptions."""
-    def __init__(self, status, message):
+    def __init__(self, status, message=None):
+        if message is None:
+            message = lib.opentmf_get_status_str(status)
         super(OpenTMFError, self).__init__(message)
         self.status = status
 
@@ -30,34 +33,32 @@ class NoMemoryError(OpenTMFError):
     """"""
 
     def __init__(self):
-        super(NoMemoryError, self).__init__(E_NO_MEMORY, 'No memory')
+        super(NoMemoryError, self).__init__(E_NO_MEMORY)
 
 
 class NotSupportedError(OpenTMFError):
     """"""
 
     def __init__(self):
-        super(NotSupportedError, self).__init__(E_NOT_SUPPORTED,
-                                                'Not supported')
+        super(NotSupportedError, self).__init__(E_NOT_SUPPORTED)
 
 
 class FailedError(OpenTMFError):
     """"""
 
     def __init__(self):
-        super(FailedError, self).__init__(E_FAILED, 'Failed')
+        super(FailedError, self).__init__(E_FAILED)
 
 
 class InvalidParamError(OpenTMFError):
     """"""
 
     def __init__(self):
-        super(InvalidParamError, self).__init__(E_INVALID_PARAM,
-                                                'Invalid parameter')
+        super(InvalidParamError, self).__init__(E_INVALID_PARAM)
 
 
 class InvalidURLError(OpenTMFError):
     """"""
 
     def __init__(self):
-        super(InvalidURLError, self).__init__(E_INVALID_URL, 'Invalid URL')
+        super(InvalidURLError, self).__init__(E_INVALID_URL)
