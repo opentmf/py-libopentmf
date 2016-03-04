@@ -18,6 +18,9 @@ License along with this library;  If not, see <http://www.gnu.org/licenses/>.
 
 from ctypes import c_void_p, c_char_p, byref, POINTER
 from .library import lib
+from .const import HT_DRIVER
+from .exceptions import InvalidURLError
+from .driver import Driver
 from .utils import chk
 
 
@@ -46,3 +49,16 @@ class Context(object):
         chk(lib.opentmf_free_driver_list(self.value, lst))
 
         return driver_names
+
+    def open(self, url):
+        handle = c_void_p(None)
+        chk(lib.opentmf_open(self.value, url, byref(handle)))
+        try:
+            ht = lib.opentmf_get_handle_type(handle)
+            if ht == HT_DRIVER:
+                return Driver(self, handle)
+            else:
+                raise InvalidURLError()
+        except Exception as e:
+            lib.opentmf_close(handle)
+            raise e
