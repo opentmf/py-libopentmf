@@ -16,7 +16,7 @@ You should have received a copy of the GNU Lesser General Public
 License along with this library;  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from ctypes import c_void_p, byref
+from ctypes import c_void_p, c_char_p, byref, POINTER
 from .library import lib
 from .utils import chk
 
@@ -31,3 +31,18 @@ class Context(object):
 
     def __del__(self):
         chk(lib.opentmf_exit(self.value))
+
+    def get_driver_list(self):
+        driver_names = []
+        lst = POINTER(c_char_p)()
+
+        chk(lib.opentmf_get_driver_list(self.value, byref(lst)))
+
+        for item in lst:
+            if item is None:
+                break
+            driver_names.append(item)
+
+        chk(lib.opentmf_free_driver_list(self.value, lst))
+
+        return driver_names
